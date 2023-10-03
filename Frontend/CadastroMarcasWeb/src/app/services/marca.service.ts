@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MarcaAPI } from '../common';
+import { MarcaAPI, ResultApi } from '../common';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -20,23 +20,36 @@ export class MarcaService {
     return true;
   }
 
-  buscarDadosPaginados(page: number, pageSize: number): Observable<MarcaAPI[]> {
+  async buscarDadosPaginados(
+    page: number,
+    pageSize: number
+  ): Promise<ResultApi> {
     const params = {
       page: page.toString(),
       pageSize: pageSize.toString(),
     };
 
-    return this.http.get(`${this.apiUrl}/paginacao`, { params }).pipe(
-      map((response: any) => {
-        // Mapeie os dados da resposta da API para a interface MarcaAPI
-        // Certifique-se de ajustar os nomes das propriedades conforme necessário
-        return response.items.map((item: any) => ({
-          id: item.id,
-          nome: item.nome,
-          nacional: item.nacional,
-          ativo: item.ativo,
-        }));
-      })
-    );
+    const result: ResultApi = {
+      dados: [],
+      totalItens: 0,
+    };
+
+    try {
+      await this.http
+        .get(`${this.apiUrl}/paginacao`, { params })
+        .subscribe((response: any) => {
+          result.dados = response.items.map((item: any) => ({
+            id: item.id,
+            nome: item.nome,
+            nacional: item.nacional,
+            ativo: item.ativo,
+          }));
+          result.totalItens = result.dados.length;
+        });
+    } catch (e) {
+      throw e;
+    } finally {
+      return result;
+    }
   }
 }

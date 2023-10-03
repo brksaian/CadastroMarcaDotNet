@@ -4,3 +4,8 @@ export interface MarcaAPI {
   nacional: string;
   ativo: string;
 }
+
+export interface ResultApi {
+  dados: MarcaAPI[];
+  totalItens: number;
+}

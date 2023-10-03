@@ -16,6 +16,7 @@ export class TelaInicialComponent implements OnInit {
   paginaAtual: number = 1;
   itensPorPagina: number = 10;
   totalPaginas: number = 1;
+  totalItens: number = 0;
 
   ngOnInit(): void {
     this.carregarDados();
@@ -38,9 +39,7 @@ export class TelaInicialComponent implements OnInit {
       const name = this.loginForm.value.name;
       const nacional = this.loginForm.value.nacional;
 
-      alert(name);
-      alert(nacional);
-      alert(this.ativo);
+      alert(this.itensPorPagina);
 
       try {
         const loggedIn = await this.marcaService.consultar(
@@ -89,5 +88,14 @@ export class TelaInicialComponent implements OnInit {
       this.paginaAtual++;
       this.carregarDados();
     }
+  }
+
+  async atualizarItensPorPagina(event: any) {
+    this.itensPorPagina = event.target.value;
+    await this.carregarDados();
+  }
+
+  editar() {
+    //
   }
 }

@@ -1,5 +1,6 @@
 <div class="container">
   <div class="right-cadastro">
+    <h1 class="titulo_cadastro">::CADASTRO DE MARCAS::</h1>
     <div class="card-cadastro">
       <form [formGroup]="loginForm" (ngSubmit)="consultar()">
         <div class="mb-3">
@@ -35,27 +36,45 @@
   <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Nome</th>
         <th>Ativo</th>
         <th>Nacional</th>
+        <th>Editar</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let marca of marcas">
-        <td>{{ marca.id }}</td>
         <td>{{ marca.nome }}</td>
         <td>{{ marca.ativo ? "Sim" : "Não" }}</td>
         <td>{{ marca.nacional ? "Sim" : "Não" }}</td>
+        <td>
+          <img
+            class="imagem"
+            src="../../../assets/img/lapis.png"
+            (click)="editar()"
+          />
+        </td>
       </tr>
     </tbody>
   </table>
 
   <div class="pagination">
-    <button (click)="anteriorPagina()" [disabled]="paginaAtual === 1">
+    <button
+      (click)="anteriorPagina()"
+      [disabled]="paginaAtual === 1 || totalItens < itensPorPagina"
+    >
       Anterior
     </button>
-    <button (click)="proximoPagina()" [disabled]="paginaAtual === totalPaginas">
+    <select id="itensPorPagina" (change)="atualizarItensPorPagina($event)">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+    </select>
+    <button
+      (click)="proximoPagina()"
+      [disabled]="paginaAtual === totalPaginas || totalItens < itensPorPagina"
+    >
       Próximo
     </button>
   </div>

@@ -1,9 +1,9 @@
 .container {
     display: flex;
     justify-content: top;
-    align-items: top;
+    align-items: center;
     padding-top: 20px;
-    /* Adicione um pouco de padding no topo */
+    flex-direction: column;
 }
 
 .logo-cadastro {
@@ -36,6 +36,7 @@
     display: flex;
     justify-content: top;
     align-items: top;
+    flex-direction: column;
 }
 
 .card-cadastro {
@@ -45,7 +46,17 @@
     align-items: top;
     flex-direction: column;
     padding: 20px;
-    /* Reduza o padding para diminuir a distância interna */
     background-color: rgb(151, 149, 153);
     border-radius: 20px;
+}
+
+.titulo_cadastro{
+    background-color: #0d1040;
+    color: white;
+    padding-left: 20px;
+}
+
+.imagem{
+    max-height: 30px;
+    max-width: 30px;
 }

@@ -1,0 +1,51 @@
+.container {
+    display: flex;
+    justify-content: top;
+    align-items: top;
+    padding-top: 20px;
+    /* Adicione um pouco de padding no topo */
+}
+
+.logo-cadastro {
+    width: 350px;
+}
+
+.text-cadastro {
+    color: rgb(0, 0, 0);
+    text-align: top;
+    font-size: 30px;
+    font-weight: bold;
+    align-items: top;
+    justify-content: top;
+    flex-direction: row;
+    margin-bottom: 75px;
+}
+
+.left-cadastro {
+    width: 50vw;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.right-cadastro {
+    width: 50vw;
+    height: auto;
+    display: flex;
+    justify-content: top;
+    align-items: top;
+}
+
+.card-cadastro {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+    flex-direction: column;
+    padding: 20px;
+    /* Reduza o padding para diminuir a distância interna */
+    background-color: rgb(151, 149, 153);
+    border-radius: 20px;
+}

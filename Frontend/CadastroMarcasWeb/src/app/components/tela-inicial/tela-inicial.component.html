@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="right-cadastro">
+    <div class="card-cadastro">
+      <form [formGroup]="loginForm" (ngSubmit)="consultar()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nome</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            formControlName="name"
+            required
+          />
+        </div>
+        <div class="mb-3 form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="ativo"
+            formControlName="ativo"
+          />
+          <label class="form-check-label" for="ativo">Ativo</label>
+        </div>
+        <div class="mb-3">
+          <label for="nacional" class="form-label">Nacional</label>
+          <select class="form-select" id="nacional" formControlName="nacional">
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+      </form>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ativo</th>
+        <th>Nacional</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let marca of marcas">
+        <td>{{ marca.id }}</td>
+        <td>{{ marca.nome }}</td>
+        <td>{{ marca.ativo ? "Sim" : "Não" }}</td>
+        <td>{{ marca.nacional ? "Sim" : "Não" }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button (click)="anteriorPagina()" [disabled]="paginaAtual === 1">
+      Anterior
+    </button>
+    <button (click)="proximoPagina()" [disabled]="paginaAtual === totalPaginas">
+      Próximo
+    </button>
+  </div>
+</div>

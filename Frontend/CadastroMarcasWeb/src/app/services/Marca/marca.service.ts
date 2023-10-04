@@ -142,7 +142,7 @@ export class MarcaService {
 
 async deletar(id: number): Promise<boolean> {
   try {
-      await this.http.delete(`${this.apiUrl}/marca/${id}`).toPromise();
+      await this.http.delete(`${this.apiUrl}/Marcas/${id}`).toPromise();
       return true;
   } catch (e) {
       console.error(e);

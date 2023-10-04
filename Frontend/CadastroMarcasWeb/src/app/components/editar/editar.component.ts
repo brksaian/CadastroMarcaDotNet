@@ -87,4 +87,40 @@ export class EditarComponent implements OnInit {
       });
     }
   }
+
+  async deletar() {
+    if (this.loginForm.valid) {
+      const name = this.loginForm.value.nameEditar;
+      const nacional = this.loginForm.value.nacionalEditar;
+      const ativo = this.loginForm.value.ativoEditar;
+      const dialogRef = this.dialog.open(ConfirmationComponent, {
+        width: '400px',
+        data: {
+          marca: name,
+          titulo: 'deleção',
+          descricao: 'deletar',
+        },
+      });
+
+      dialogRef.afterClosed().subscribe(async (resultado) => {
+        if (resultado) {
+          try{
+            this.marca.nome = name;
+          this.marca.nacional = nacional;
+          this.marca.ativo = ativo;
+          const res = await this.marcaService.deletar(this.marca.id);
+          if (res) {
+            this.dialogRef.close(true);
+          }
+          }catch(e){
+            console.log(e);
+            this.notificationService.mostrarNotificacao(
+              `Erro: ${e}`
+            );
+          }
+          
+        }
+      });
+    }
+  }
 }

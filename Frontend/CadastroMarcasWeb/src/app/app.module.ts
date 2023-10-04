@@ -6,10 +6,20 @@ import { AppComponent } from './app.component';
 import { MarcaModule } from './modules/marca';
 import { HeaderComponent } from './components/header';
 import { FooterComponent } from './components/footer';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NotificationSuccessComponent } from './components/notification-success/notification-success.component';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent],
-  imports: [BrowserModule, AppRoutingModule, MarcaModule],
+  declarations: [AppComponent, HeaderComponent, FooterComponent, ConfirmationComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    MarcaModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

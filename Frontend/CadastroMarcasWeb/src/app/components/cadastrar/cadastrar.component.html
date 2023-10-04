@@ -1,1 +1,53 @@
-<p>cadastrar works!</p>
+<app-notification_error />
+<app-notification-success />
+<div class="confirmacao-overlay" *ngIf="marca">
+  <h1 class="titulo_cadastro">:: CADASTRO DE MARCAS :: Novo</h1>
+  <div>
+    <form [formGroup]="loginForm" (ngSubmit)="novo()">
+      <div class="confirmacao-container">
+        <div class="mb-3">
+          <label for="nacionalNovo" class="form-label">Nacional</label>
+          <select
+            class="form-select"
+            id="nacionalNovo"
+            formControlName="nacionalNovo"
+          >
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+          </select>
+        </div>
+        <div class="cadastro-marca-nome-ativo">
+          <div class="mb-3">
+            <label for="nameNovo" class="form-label">Nome</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nameNovo"
+              placeholder="Digite o nome da marca"
+              formControlName="nameNovo"
+              required
+            />
+          </div>
+          <div class="mb-3 form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="ativoNovo"
+              formControlName="ativoNovo"
+            />
+            <label class="form-check-label" for="ativoNovo"> Ativo</label>
+          </div>
+        </div>
+      </div>
+      <div class="titulo_cadastro">
+        <button mat-button type="submit">
+          <img src="../../../assets/img/selecionado.png" class="image" />
+          Salvar
+        </button>
+        <button type="button" (click)="dialogRef.close(false)">
+          <img src="../../../assets/img/x.png" class="image" />Fechar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

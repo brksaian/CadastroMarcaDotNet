@@ -1,37 +1,59 @@
+<app-notification_error />
+<app-notification-success />
 <div class="container">
   <div class="right-cadastro">
-    <h1 class="titulo_cadastro">::CADASTRO DE MARCAS::</h1>
-    <div class="card-cadastro">
-      <form [formGroup]="loginForm" (ngSubmit)="consultar()">
-        <div class="mb-3">
-          <label for="nacional" class="form-label">Nacional</label>
-          <select class="form-select" id="nacional" formControlName="nacional">
-            <option value="true">Sim</option>
-            <option value="false">Não</option>
-          </select>
+    <h1 class="titulo_cadastro">:: CADASTRO DE MARCAS :: {{ titulo }}</h1>
+    <div>
+      <form [formGroup]="marcasForm" (ngSubmit)="consultar()">
+        <div class="card-cadastro">
+          <div class="mb-3">
+            <label for="nacional" class="form-label">Nacional</label>
+            <select
+              class="form-select"
+              id="nacional"
+              formControlName="nacional"
+            >
+              <option value="true" selected>Sim</option>
+              <option value="false">Não</option>
+            </select>
+          </div>
+          <div class="cadastro-marca-nome-ativo">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nome</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Digite o nome da marca"
+                formControlName="name"
+                required
+              />
+            </div>
+            <div class="mb-3 form-check">
+              <label class="form-check-label" for="ativo">Sta. Ativo</label>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="ativo"
+                formControlName="ativo"
+              />
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="name" class="form-label">Nome</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            formControlName="name"
-            required
-          />
-        </div>
-        <div class="mb-3 form-check">
-          <input
-            type="checkbox"
-            class="form-check-input"
-            id="ativo"
-            formControlName="ativo"
-          />
-          <label class="form-check-label" for="ativo">Ativo</label>
-        </div>
+
         <div class="titulo_cadastro">
-          <button type="submit" class="btn btn-primary">Consulta</button>
-          <button type="submit" class="btn btn-primary">Novo</button>
+          <button type="submit" class="btn btn-primary">
+            <img src="../../../assets/img/lupa.png" class="image" />
+            Consulta
+          </button>
+          <button class="btn btn-primary" (click)="novo()" type="button">
+            <img src="../../../assets/img/mais.png" class="image" />
+            Novo
+          </button>
+          <button class="btn btn-primary" (click)="reload()" type="button">
+            <img src="../../../assets/img/vassoura.png" class="image" />
+            Limpar pesquisa
+          </button>
         </div>
       </form>
     </div>
@@ -51,22 +73,44 @@
         <td>{{ marca.ativo ? "Sim" : "Não" }}</td>
         <td>{{ marca.nacional ? "Sim" : "Não" }}</td>
         <td>
-          <img
-            class="imagem"
-            src="../../../assets/img/lapis.png"
-            (click)="editar()"
-          />
+          <a (click)="editar(marca)">
+            <img class="imagem" src="../../../assets/img/lapis.png" />
+          </a>
         </td>
       </tr>
     </tbody>
   </table>
 
   <div class="pagination">
+    <span class="pagina">
+      Mostrando {{ marcas.length }} de {{ totalItens }}
+    </span>
     <button
       (click)="anteriorPagina()"
       [disabled]="paginaAtual === 1 || totalItens < itensPorPagina"
     >
-      Anterior
+      <img src="../../../assets/img/start.png" class="image" />
+    </button>
+    <button
+      (click)="anteriorPagina()"
+      [disabled]="paginaAtual === 1 || totalItens < itensPorPagina"
+    >
+      <img src="../../../assets/img/voltar.png" class="image" />
+    </button>
+    <span class="pag-atual">
+      {{ paginaAtual }}
+    </span>
+    <button
+      (click)="proximoPagina()"
+      [disabled]="paginaAtual === totalPaginas || totalItens < itensPorPagina"
+    >
+      <img src="../../../assets/img/avancar.png" class="image" />
+    </button>
+    <button
+      (click)="proximoPagina()"
+      [disabled]="paginaAtual === totalPaginas || totalItens < itensPorPagina"
+    >
+      <img src="../../../assets/img/end.png" class="image" />
     </button>
     <select
       id="itensPorPagina"
@@ -78,11 +122,5 @@
       <option value="15">15</option>
       <option value="20">20</option>
     </select>
-    <button
-      (click)="proximoPagina()"
-      [disabled]="paginaAtual === totalPaginas || totalItens < itensPorPagina"
-    >
-      Próximo
-    </button>
   </div>
 </div>

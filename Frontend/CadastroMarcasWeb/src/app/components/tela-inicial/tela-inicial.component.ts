@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { MarcaService } from 'src/app/services';
+import { MarcaAPI } from 'src/app/common';
+import {
+  MarcaService,
+  NotificationService,
+  NotificationSuccessService,
+} from 'src/app/services';
+import { EditarComponent } from '../editar';
+import { CadastrarComponent } from '../cadastrar';
 
 @Component({
   selector: 'app-tela-inicial',
@@ -9,9 +17,9 @@ import { MarcaService } from 'src/app/services';
   styleUrls: ['./tela-inicial.component.css'],
 })
 export class TelaInicialComponent implements OnInit {
-  loginForm: FormGroup;
+  marcasForm: FormGroup;
   loginFailed = false;
-  ativo: boolean = false;
+  titulo: string = '';
   marcas: any[] = [];
   paginaAtual: number = 1;
   itensPorPagina: number = 10;
@@ -25,33 +33,41 @@ export class TelaInicialComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private marcaService: MarcaService
+    private marcaService: MarcaService,
+    public dialog: MatDialog,
+    private notificationService: NotificationService,
+    private notificationSuccessService: NotificationSuccessService
   ) {
-    this.loginForm = this.formBuilder.group({
+    this.marcasForm = this.formBuilder.group({
       name: ['', Validators.required],
       nacional: ['true'],
-      cep: [''],
+      ativo: ['true'],
     });
   }
 
   async consultar() {
-    if (this.loginForm.valid) {
-      const name = this.loginForm.value.name;
-      const nacional = this.loginForm.value.nacional;
-
-      alert(this.itensPorPagina);
+    this.titulo = 'Consulta';
+    if (this.marcasForm.valid) {
+      const name = this.marcasForm.value.name;
+      const nacional = this.marcasForm.value.nacional;
 
       try {
-        const loggedIn = await this.marcaService.consultar(
+        const result = await this.marcaService.consultar(
           name,
           nacional,
-          this.ativo // Use 'this.ativo' como valor do checkbox
+          this.marcasForm.value.ativo,
+          0,
+          this.itensPorPagina
         );
-        if (loggedIn) {
-          console.log('Login bem-sucedido');
-          this.router.navigate(['login']);
+
+        console.log(result);
+        if (result.dados.length > 0) {
+          this.carregarDadosConsulta(result.dados);
         } else {
-          this.loginFailed = true;
+          this.notificationService.mostrarNotificacao(
+            'Não foi possível localizar a marca.'
+          );
+          this.titulo = '';
         }
       } catch (error) {
         console.error('Erro na requisição HTTP:', error);
@@ -61,6 +77,8 @@ export class TelaInicialComponent implements OnInit {
   }
 
   async carregarDados() {
+    this.titulo = '';
+    this.marcasForm.reset();
     const indiceInicial = (this.paginaAtual - 1) * this.itensPorPagina;
 
     try {
@@ -69,10 +87,23 @@ export class TelaInicialComponent implements OnInit {
         this.itensPorPagina
       );
 
+      console.log(resultado);
+
       this.marcas = resultado.dados;
       this.totalPaginas = Math.ceil(resultado.totalItens / this.itensPorPagina);
 
       this.totalItens = resultado.totalItens;
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  }
+
+  async carregarDadosConsulta(marcaApis: MarcaAPI[]) {
+    try {
+      this.marcas = marcaApis;
+      this.totalPaginas = Math.ceil(marcaApis.length / this.itensPorPagina);
+
+      this.totalItens = marcaApis.length;
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
@@ -97,7 +128,47 @@ export class TelaInicialComponent implements OnInit {
     await this.carregarDados();
   }
 
-  editar() {
-    //
+  editar(marca: MarcaAPI): void {
+    const dialogRef = this.dialog.open(EditarComponent, {
+      width: '600px',
+      height: '400px',
+      data: { marca },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.notificationSuccessService.mostrarNotificacao(
+          'Registro editado com sucesso!'
+        );
+        this.carregarDados();
+      }
+    });
+  }
+
+  novo(): void {
+    const marca: MarcaAPI = {
+      nome: this.marcasForm.value.name,
+      nacional: this.marcasForm.value.nacional,
+      ativo: this.marcasForm.value.ativo,
+      id: 0,
+    };
+    const dialogRef = this.dialog.open(CadastrarComponent, {
+      width: '600px',
+      height: '400px',
+      data: { marca },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.notificationSuccessService.mostrarNotificacao(
+          'Registro adicionado com sucesso!'
+        );
+        this.carregarDados();
+      }
+    });
+  }
+
+  async reload() {
+    await this.carregarDados();
   }
 }

@@ -1,0 +1,6 @@
+<div class="notification-container" *ngIf="isVisible">
+  <div class="notification-message error">
+    {{ errorMessage }}
+  </div>
+  <button (click)="fecharNotificacao()" class="close-button">Fechar</button>
+</div>

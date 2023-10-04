@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MarcaAPI, ResultApi } from '../common';
+import { MarcaAPI, ResultApi } from '../../common';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -81,9 +81,61 @@ export class MarcaService {
   async consultar(
     name: string,
     ativo: boolean,
-    nacional: boolean
-  ): Promise<boolean> {
-    return true;
+    nacional: boolean,
+    atual: number,
+    pageSize: number
+  ): Promise<ResultApi> {
+    const params = {
+      name: name.toString(),
+      ativo: ativo.toString(),
+      nacional: nacional.toString(),
+    };
+
+    nacional = Boolean(nacional);
+    ativo = Boolean(ativo);
+
+    const result: ResultApi = {
+      dados: [],
+      totalItens: 0,
+    };
+
+    try {
+      await this.http
+        .get(`${this.apiUrl}/paginacao`, { params })
+        .subscribe((response: any) => {
+          result.dados = response.items.map((item: any) => ({
+            id: item.id,
+            nome: item.nome,
+            nacional: item.nacional,
+            ativo: item.ativo,
+          }));
+          result.totalItens = result.dados.length;
+        });
+    } catch (e) {
+      throw e;
+    } finally {
+      var arr: MarcaAPI[] = this.listTesteResult.dados.filter(
+        (dado: MarcaAPI) => {
+          return (
+            dado.nome.toLocaleLowerCase().includes(name.toLocaleLowerCase()) &&
+            dado.nacional == nacional &&
+            dado.ativo == ativo
+          );
+        }
+      );
+      if (pageSize < arr.length) {
+        let final: number =
+          atual * pageSize + pageSize < arr.length
+            ? atual + pageSize
+            : arr.length;
+        arr = arr.slice(atual, final);
+      }
+      const result: ResultApi = {
+        dados: arr,
+        totalItens: arr.length,
+      };
+      return result;
+    }
   }
 
   async buscarDadosPaginados(
@@ -129,5 +181,51 @@ export class MarcaService {
       };
       return result;
     }
+  }
+
+  async editar(marcaApi: MarcaAPI): Promise<boolean> {
+    const params = {
+      name: marcaApi.nome.toString(),
+      ativo: marcaApi.ativo.toString(),
+      nacional: marcaApi.nacional.toString(),
+      id: marcaApi.id,
+    };
+    try {
+      await this.http
+        .post(`${this.apiUrl}/marca/editar`, { params })
+        .subscribe((response: any) => {
+          console.log(response);
+        });
+    } catch (e) {
+      throw e;
+    }
+
+    return false;
+  }
+
+  async novo(
+    name: string,
+    ativo: boolean,
+    nacional: boolean
+  ): Promise<boolean> {
+    const params = {
+      name: name.toString(),
+      ativo: ativo.toString(),
+      nacional: nacional.toString(),
+    };
+
+    nacional = Boolean(nacional);
+    ativo = Boolean(ativo);
+    try {
+      await this.http
+        .post(`${this.apiUrl}/marca/novo`, { params })
+        .subscribe((response: any) => {
+          console.log(response);
+        });
+    } catch (e) {
+      throw e;
+    }
+
+    return true;
   }
 }

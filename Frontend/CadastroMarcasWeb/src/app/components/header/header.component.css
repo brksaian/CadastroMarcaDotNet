@@ -1,0 +1,15 @@
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header h1{
+    color: #0d1040;
+}
+
+.image{
+    position: absolute;
+    margin: 2rem;
+    right: 0;
+}

@@ -1,0 +1,24 @@
+<div class="confirmacao-overlay" *ngIf="data.marca">
+  <div class="confirmacao-container">
+    <h2>Confirmação de {{ titulo }}</h2>
+    <p>
+      Tem certeza de que deseja {{ descricao }} a marca
+      <strong>{{ data.marca }}</strong
+      >?
+    </p>
+    <button
+      mat-button
+      (click)="fecharDialogComResultado()"
+      class="botao-confirmar"
+    >
+      {{ descricao[0].toUpperCase() + descricao.substring(1) }} marca
+    </button>
+    <button
+      (click)="dialogRef.close(false)"
+      type="button"
+      class="cancelar-button"
+    >
+      Fechar
+    </button>
+  </div>
+</div>

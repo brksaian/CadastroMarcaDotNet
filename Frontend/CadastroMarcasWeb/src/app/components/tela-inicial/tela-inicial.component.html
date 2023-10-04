@@ -4,6 +4,13 @@
     <div class="card-cadastro">
       <form [formGroup]="loginForm" (ngSubmit)="consultar()">
         <div class="mb-3">
+          <label for="nacional" class="form-label">Nacional</label>
+          <select class="form-select" id="nacional" formControlName="nacional">
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+          </select>
+        </div>
+        <div class="mb-3">
           <label for="name" class="form-label">Nome</label>
           <input
             type="text"
@@ -22,14 +29,10 @@
           />
           <label class="form-check-label" for="ativo">Ativo</label>
         </div>
-        <div class="mb-3">
-          <label for="nacional" class="form-label">Nacional</label>
-          <select class="form-select" id="nacional" formControlName="nacional">
-            <option value="true">Sim</option>
-            <option value="false">Não</option>
-          </select>
+        <div class="titulo_cadastro">
+          <button type="submit" class="btn btn-primary">Consulta</button>
+          <button type="submit" class="btn btn-primary">Novo</button>
         </div>
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
       </form>
     </div>
   </div>
@@ -65,9 +68,13 @@
     >
       Anterior
     </button>
-    <select id="itensPorPagina" (change)="atualizarItensPorPagina($event)">
+    <select
+      id="itensPorPagina"
+      (change)="atualizarItensPorPagina($event)"
+      defaultvalua=""
+    >
       <option value="5">5</option>
-      <option value="10">10</option>
+      <option value="10" selected="selected">10</option>
       <option value="15">15</option>
       <option value="20">20</option>
     </select>

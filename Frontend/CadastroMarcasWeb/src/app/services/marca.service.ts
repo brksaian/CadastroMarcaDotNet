@@ -13,7 +13,7 @@ export class MarcaService {
   constructor(private http: HttpClient) {}
 
   listTesteResult: ResultApi = {
-    totalItens: 5,
+    totalItens: 10,
     dados: [
       {
         id: 1,
@@ -47,31 +47,31 @@ export class MarcaService {
       },
       {
         id: 1,
-        nome: 'Teste',
+        nome: 'Teste 5',
         nacional: true,
         ativo: true,
       },
       {
         id: 2,
-        nome: 'Teste1',
+        nome: 'Teste 6',
         nacional: true,
         ativo: true,
       },
       {
         id: 3,
-        nome: 'Teste 2',
+        nome: 'Teste 7',
         nacional: true,
         ativo: false,
       },
       {
         id: 4,
-        nome: 'Teste 3',
+        nome: 'Teste 8',
         nacional: false,
         ativo: true,
       },
       {
         id: 5,
-        nome: 'Teste 4',
+        nome: 'Teste 9',
         nacional: false,
         ativo: false,
       },
@@ -87,11 +87,11 @@ export class MarcaService {
   }
 
   async buscarDadosPaginados(
-    page: number,
+    atual: number,
     pageSize: number
   ): Promise<ResultApi> {
     const params = {
-      page: page.toString(),
+      page: atual.toString(),
       pageSize: pageSize.toString(),
     };
 
@@ -117,16 +117,17 @@ export class MarcaService {
     } finally {
       var arr: MarcaAPI[] = this.listTesteResult.dados;
       if (pageSize < arr.length) {
-        arr = arr.slice(
-          pageSize * (page + 1),
-          (page + 1) * pageSize + pageSize < arr.length
-            ? (page + 1) * pageSize + pageSize
-            : arr.length
-        );
+        let final: number =
+          atual * pageSize + pageSize < arr.length
+            ? atual + pageSize
+            : arr.length;
+        arr = arr.slice(atual, final);
       }
-      this.listTesteResult.dados = arr;
-      console.log(arr, pageSize, page);
-      return this.listTesteResult;
+      const result: ResultApi = {
+        dados: arr,
+        totalItens: this.listTesteResult.totalItens,
+      };
+      return result;
     }
   }
 }

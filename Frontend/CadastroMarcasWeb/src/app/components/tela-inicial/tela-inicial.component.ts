@@ -71,6 +71,8 @@ export class TelaInicialComponent implements OnInit {
 
       this.marcas = resultado.dados;
       this.totalPaginas = Math.ceil(resultado.totalItens / this.itensPorPagina);
+
+      this.totalItens = resultado.totalItens;
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
@@ -91,7 +93,7 @@ export class TelaInicialComponent implements OnInit {
   }
 
   async atualizarItensPorPagina(event: any) {
-    this.itensPorPagina = event.target.value;
+    this.itensPorPagina = parseInt(event.target.value);
     await this.carregarDados();
   }
 

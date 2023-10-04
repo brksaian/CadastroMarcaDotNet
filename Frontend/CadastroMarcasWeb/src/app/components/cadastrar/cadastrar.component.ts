@@ -65,7 +65,8 @@ export class CadastrarComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (resultado) => {
         if (resultado) {
-          const res = await this.marcaService.novo(name, nacional, ativo);
+          try{
+            const res = await this.marcaService.novo(name, nacional, ativo);
           if (res) {
             this.dialogRef.close(true);
           } else {
@@ -73,6 +74,12 @@ export class CadastrarComponent implements OnInit {
               'Marca já existe no Cadastro!”'
             );
           }
+          }catch(e){
+            this.notificationService.mostrarNotificacao(
+              'Marca já existe no Cadastro!”'
+            );
+          }
+          
         }
       });
     }

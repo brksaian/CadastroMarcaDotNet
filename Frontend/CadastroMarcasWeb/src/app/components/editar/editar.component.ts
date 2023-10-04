@@ -65,7 +65,8 @@ export class EditarComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (resultado) => {
         if (resultado) {
-          this.marca.nome = name;
+          try{
+            this.marca.nome = name;
           this.marca.nacional = nacional;
           this.marca.ativo = ativo;
           const res = await this.marcaService.editar(this.marca);
@@ -76,6 +77,12 @@ export class EditarComponent implements OnInit {
               'Marca já existe no Cadastro!”'
             );
           }
+          }catch(e){
+            this.notificationService.mostrarNotificacao(
+              'Marca já existe no Cadastro!”'
+            );
+          }
+          
         }
       });
     }
